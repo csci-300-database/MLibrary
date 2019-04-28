@@ -1,0 +1,11 @@
+.root {
+    -fx-background-color: #C4BDBD;
+}
+
+.app_bar {
+    -fx-background-color: #8D7C7C;
+    -fx-padding: 15;
+    -fx-pref-height: 50;
+    -fx-font-size: 20;
+    -fx-font-family: Verdana;
+}

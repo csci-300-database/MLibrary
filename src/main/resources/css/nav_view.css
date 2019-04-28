@@ -1,0 +1,12 @@
+.nav_bar {
+    -fx-background-color: #8D7C7C;
+    -fx-padding: 15;
+    -fx-pref-height: 545;
+    -fx-font-size: 18;
+    -fx-font-family: Verdana;
+    -fx-spacing: 18;
+}
+
+.button {
+    -fx-background-color: #FFFFFF;
+}

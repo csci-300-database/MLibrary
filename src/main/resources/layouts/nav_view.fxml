@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox id="nav_bar_items" fx:id="nav_view" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="545.0" prefWidth="200.0" styleClass="nav_bar" stylesheets="@../css/nav_view.css" xmlns="http://javafx.com/javafx/8.0.211" xmlns:fx="http://javafx.com/fxml/1" fx:controller="csci.database.mlibrary.controllers.NavController">
+   <children>
+      <JFXButton fx:id="nav_item_book" prefHeight="35.0" prefWidth="189.0" text="Books" />
+      <JFXButton fx:id="nav_item_textbook" layoutX="25.0" layoutY="25.0" prefHeight="35.0" prefWidth="189.0" text="TextBooks" />
+      <JFXButton fx:id="nav_item_media" layoutX="25.0" layoutY="60.0" prefHeight="35.0" prefWidth="189.0" text="Media" />
+      <JFXButton fx:id="nav_item_computer" layoutX="25.0" layoutY="95.0" prefHeight="35.0" prefWidth="189.0" text="Computers" />
+      <JFXButton fx:id="nav_item_tutor" layoutX="25.0" layoutY="130.0" prefHeight="35.0" prefWidth="189.0" text="Tutors" />
+      <JFXButton fx:id="nav_item_book_loan" layoutX="25.0" layoutY="165.0" prefHeight="35.0" prefWidth="189.0" text="Book Loan" />
+      <JFXButton fx:id="nav_item_textbook_loan" layoutX="25.0" layoutY="200.0" prefHeight="35.0" prefWidth="189.0" text="TextBook Loan" />
+      <JFXButton fx:id="nav_item_media_loan" layoutX="25.0" layoutY="235.0" prefHeight="35.0" prefWidth="189.0" text="Media Loan" />
+      <JFXButton fx:id="nav_item_staff" layoutX="25.0" layoutY="270.0" prefHeight="35.0" prefWidth="189.0" text="Staff" />
+      <JFXButton fx:id="nav_item_customer" layoutX="25.0" layoutY="305.0" prefHeight="35.0" prefWidth="189.0" text="Customers" />
+   </children>
+</VBox>
