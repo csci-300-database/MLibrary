@@ -4,6 +4,7 @@ import com.jfoenix.controls.*;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import com.jfoenix.transitions.hamburger.HamburgerBasicCloseTransition;
 import csci.database.mlibrary.MainView;
+import csci.database.mlibrary.database.SQLManager;
 import csci.database.mlibrary.enums.TableTypes;
 import csci.database.mlibrary.structures.Book;
 import javafx.application.Platform;
@@ -27,7 +28,6 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -71,6 +71,8 @@ public class MainController implements Initializable, EventHandler<Event> {
     private TableTypes currentTable;
 
     private ObservableList<Book> bookObservables = FXCollections.observableArrayList();
+
+    private SQLManager sqlManager;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -183,6 +185,10 @@ public class MainController implements Initializable, EventHandler<Event> {
         this.primaryStage = primaryStage;
     }
 
+    public void setSqlManager(SQLManager sqlManager) {
+        this.sqlManager = sqlManager;
+    }
+
     private void handleCloseClick() {
         JFXDialogLayout layout = new JFXDialogLayout();
         layout.setHeading(new Text("MLibrary"));
@@ -236,23 +242,26 @@ public class MainController implements Initializable, EventHandler<Event> {
 
         JFXTreeTableColumn<Book, String> bookAuthorCol = new JFXTreeTableColumn<>("Book Author");
         bookAuthorCol.setPrefWidth(150);
-        bookAuthorCol.setCellValueFactory(param -> param.getValue().getValue().title);
+        bookAuthorCol.setCellValueFactory(param -> param.getValue().getValue().author);
 
         JFXTreeTableColumn<Book, String> bookGenreCol = new JFXTreeTableColumn<>("Book Genre");
         bookGenreCol.setPrefWidth(150);
-        bookGenreCol.setCellValueFactory(param -> param.getValue().getValue().title);
+        bookGenreCol.setCellValueFactory(param -> param.getValue().getValue().genre);
 
         JFXTreeTableColumn<Book, String> bookISBNCol = new JFXTreeTableColumn<>("Book ISBN");
         bookISBNCol.setPrefWidth(150);
-        bookISBNCol.setCellValueFactory(param -> param.getValue().getValue().title);
+        bookISBNCol.setCellValueFactory(param -> param.getValue().getValue().ISBN);
 
         JFXTreeTableColumn<Book, String> bookIsleCol = new JFXTreeTableColumn<>("Book Isle");
         bookIsleCol.setPrefWidth(150);
-        bookIsleCol.setCellValueFactory(param -> param.getValue().getValue().title);
+        bookIsleCol.setCellValueFactory(param -> param.getValue().getValue().isle);
 
         JFXTreeTableColumn<Book, String> bookIdCol = new JFXTreeTableColumn<>("Book Id");
         bookIdCol.setPrefWidth(150);
-        bookIdCol.setCellValueFactory(param -> param.getValue().getValue().title);
+        bookIdCol.setCellValueFactory(param -> param.getValue().getValue().bookId);
+
+        List<Book> books = sqlManager.collectBooks();
+        bookObservables.addAll(books);
 
         final TreeItem<Book> root = new RecursiveTreeItem<>(bookObservables, RecursiveTreeObject::getChildren);
         List<JFXTreeTableColumn<Book, String>> columns = Arrays.asList(bookTitleCol, bookAuthorCol, bookGenreCol, bookISBNCol, bookIsleCol, bookIdCol);

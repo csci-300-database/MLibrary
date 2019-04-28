@@ -29,6 +29,7 @@ public class MainView extends Application {
         primaryStage.show();
 
         SQLManager manager = new SQLManager();
+        controller.setSqlManager(manager);
 
     }
 
