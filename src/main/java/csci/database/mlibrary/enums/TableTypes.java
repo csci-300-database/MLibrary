@@ -7,10 +7,10 @@ public enum TableTypes {
     STAFF,
     TUTOR,
     MEDIA,
-    CUSTOEMR,
+    CUSTOMER,
     COMPUTER,
-    BOOKLOAN,
-    TEXTBOOKLOAN,
-    MEDIALOAN
+    BOOK_LOAN,
+    TEXTBOOK_LOAN,
+    MEDIA_LOAN
 
 }

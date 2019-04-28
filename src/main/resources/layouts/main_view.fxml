@@ -2,16 +2,16 @@
 
 <?import com.jfoenix.controls.JFXDrawer?>
 <?import com.jfoenix.controls.JFXHamburger?>
+<?import com.jfoenix.controls.JFXTreeTableView?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.StackPane?>
 
-<AnchorPane fx:id="main_view" prefHeight="600.0" prefWidth="900.0" stylesheets="@../css/main_view.css" xmlns="http://javafx.com/javafx/8.0.211" xmlns:fx="http://javafx.com/fxml/1" fx:controller="csci.database.mlibrary.controllers.MainController">
+<AnchorPane prefHeight="600.0" prefWidth="900.0" stylesheets="@../css/main_view.css" xmlns="http://javafx.com/javafx/8.0.211" xmlns:fx="http://javafx.com/fxml/1" fx:controller="csci.database.mlibrary.controllers.MainController">
    <Label fx:id="app_bar" prefHeight="26.0" prefWidth="900.0" styleClass="app_bar" text="MLibrary" />
    <JFXHamburger fx:id="nav_stack" layoutX="856.0" layoutY="18.0" />
-   <JFXDrawer fx:id="nav_drawer" defaultDrawerSize="200.0" direction="RIGHT" layoutX="700.0" layoutY="55.0" prefHeight="545.0" prefWidth="200.0" />
    <ImageView fx:id="close_icon" fitHeight="31.0" fitWidth="30.0" layoutX="475.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true">
       <image>
          <Image url="@../assets/delete_sign_48px.png" />
@@ -22,5 +22,11 @@
          <Image url="@../assets/horizontal_line_filled_50px.png" />
       </image>
    </ImageView>
-   <StackPane fx:id="content_pane" layoutY="55.0" prefHeight="545.0" prefWidth="700.0" />
+   <StackPane fx:id="content_pane" layoutY="55.0" prefHeight="545.0" prefWidth="900.0">
+      <children>
+         <JFXTreeTableView fx:id="library_table" prefHeight="545.0" prefWidth="609.0" />
+         <Label fx:id="label_instruct" alignment="CENTER" prefHeight="70.0" prefWidth="384.0" styleClass="label_instruct" text="Click the ☰ icon to navigate the database" visible="false" />
+      </children>
+   </StackPane>
+   <JFXDrawer fx:id="nav_drawer" defaultDrawerSize="200.0" direction="RIGHT" layoutX="700.0" layoutY="55.0" prefHeight="545.0" prefWidth="200.0" />
 </AnchorPane>

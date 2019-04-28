@@ -9,3 +9,7 @@
     -fx-font-size: 20;
     -fx-font-family: Verdana;
 }
+
+.label_instruct {
+    -fx-background-color: #8D7C7C;
+}

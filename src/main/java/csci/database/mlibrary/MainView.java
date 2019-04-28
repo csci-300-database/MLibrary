@@ -1,6 +1,7 @@
 package csci.database.mlibrary;
 
 import csci.database.mlibrary.controllers.MainController;
+import csci.database.mlibrary.database.SQLManager;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -26,6 +27,8 @@ public class MainView extends Application {
         primaryStage.setScene(scene);
 
         primaryStage.show();
+
+        SQLManager manager = new SQLManager();
 
     }
 

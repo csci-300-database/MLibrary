@@ -1,10 +1,14 @@
 package csci.database.mlibrary.controllers;
 
 import com.jfoenix.controls.*;
+import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import com.jfoenix.transitions.hamburger.HamburgerBasicCloseTransition;
 import csci.database.mlibrary.MainView;
 import csci.database.mlibrary.enums.TableTypes;
+import csci.database.mlibrary.structures.Book;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -13,6 +17,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
+import javafx.scene.control.TreeItem;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -22,6 +27,9 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class MainController implements Initializable, EventHandler<Event> {
@@ -49,6 +57,12 @@ public class MainController implements Initializable, EventHandler<Event> {
     @FXML
     private ImageView min_icon;
 
+    @FXML
+    private Label label_instruct;
+
+    @FXML
+    private JFXTreeTableView<Book> library_table;
+
     private double offsetX = 0;
     private double offsetY = 0;
 
@@ -56,12 +70,17 @@ public class MainController implements Initializable, EventHandler<Event> {
 
     private TableTypes currentTable;
 
+    private ObservableList<Book> bookObservables = FXCollections.observableArrayList();
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(MainView.class.getResource("/layouts/nav_view.fxml"));
             Parent root = loader.load();
+
+            NavController navController = loader.getController();
+            navController.setMainController(this);
 
             nav_drawer.setSidePane(root);
 
@@ -73,6 +92,8 @@ public class MainController implements Initializable, EventHandler<Event> {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
+
+        label_instruct.setVisible(true);
 
         app_bar.setOnMousePressed(this);
         app_bar.setOnMouseDragged(this);
@@ -182,6 +203,66 @@ public class MainController implements Initializable, EventHandler<Event> {
 
     private void handleMinClick() {
         primaryStage.setIconified(true);
+    }
+
+    void setCurrentTable(TableTypes currentTable) {
+        this.currentTable = currentTable;
+        if (this.currentTable != null) {
+            label_instruct.setVisible(false);
+            drawTable();
+        } else {
+            label_instruct.setVisible(true);
+        }
+    }
+
+    private void drawTable() {
+        switch (currentTable) {
+            case BOOK:
+                drawBookTable();
+                break;
+            case TEXTBOOK:
+                drawTextBook();
+                break;
+            default :
+                System.out.println("Unknown Table");
+                break;
+        }
+    }
+
+    private void drawBookTable() {
+        JFXTreeTableColumn<Book, String> bookTitleCol = new JFXTreeTableColumn<>("Book Title");
+        bookTitleCol.setPrefWidth(150);
+        bookTitleCol.setCellValueFactory(param -> param.getValue().getValue().title);
+
+        JFXTreeTableColumn<Book, String> bookAuthorCol = new JFXTreeTableColumn<>("Book Author");
+        bookAuthorCol.setPrefWidth(150);
+        bookAuthorCol.setCellValueFactory(param -> param.getValue().getValue().title);
+
+        JFXTreeTableColumn<Book, String> bookGenreCol = new JFXTreeTableColumn<>("Book Genre");
+        bookGenreCol.setPrefWidth(150);
+        bookGenreCol.setCellValueFactory(param -> param.getValue().getValue().title);
+
+        JFXTreeTableColumn<Book, String> bookISBNCol = new JFXTreeTableColumn<>("Book ISBN");
+        bookISBNCol.setPrefWidth(150);
+        bookISBNCol.setCellValueFactory(param -> param.getValue().getValue().title);
+
+        JFXTreeTableColumn<Book, String> bookIsleCol = new JFXTreeTableColumn<>("Book Isle");
+        bookIsleCol.setPrefWidth(150);
+        bookIsleCol.setCellValueFactory(param -> param.getValue().getValue().title);
+
+        JFXTreeTableColumn<Book, String> bookIdCol = new JFXTreeTableColumn<>("Book Id");
+        bookIdCol.setPrefWidth(150);
+        bookIdCol.setCellValueFactory(param -> param.getValue().getValue().title);
+
+        final TreeItem<Book> root = new RecursiveTreeItem<>(bookObservables, RecursiveTreeObject::getChildren);
+        List<JFXTreeTableColumn<Book, String>> columns = Arrays.asList(bookTitleCol, bookAuthorCol, bookGenreCol, bookISBNCol, bookIsleCol, bookIdCol);
+        library_table.getColumns().setAll(columns);
+        library_table.setRoot(root);
+        library_table.setShowRoot(false);
+    }
+
+    private void drawTextBook() {
+
     }
 
 }

@@ -45,6 +45,7 @@ public class NavController implements Initializable, EventHandler<Event> {
     @FXML
     private Button nav_item_media_loan;
 
+    private MainController mainController;
     private Node selected;
     private TableTypes currentTable;
 
@@ -83,6 +84,30 @@ public class NavController implements Initializable, EventHandler<Event> {
                 case "nav_item_textbook" :
                     handleNavTextbook();
                     break;
+                case "nav_item_media" :
+                    handleNavMedia();
+                    break;
+                case "nav_item_computer" :
+                    handleNavComputer();
+                    break;
+                case "nav_item_tutor" :
+                    handleNavTutor();
+                    break;
+                case "nav_item_book_loan" :
+                    handleNavBookLoan();
+                    break;
+                case "nav_item_textbook_loan" :
+                    handleNavTextBookLoan();
+                    break;
+                case "nav_item_media_loan" :
+                    handleNavMediaLoan();
+                    break;
+                case "nav_item_staff" :
+                    handleNavStaff();
+                    break;
+                case "nav_item_customer" :
+                    handleNavCustomer();
+                    break;
                 default :
                     System.out.println("Unknown node id");
                     break;
@@ -91,29 +116,135 @@ public class NavController implements Initializable, EventHandler<Event> {
     }
 
     private void handleNavBook() {
-        if (selected != null) {
-            selected.setStyle("-fx-background-color: #FFFFFF");
-        }
         if (currentTable != TableTypes.BOOK) {
+            if (selected != null) {
+                selected.setStyle("-fx-background-color: #FFFFFF");
+            }
+
             currentTable = TableTypes.BOOK;
             nav_item_book.setStyle("-fx-background-color: #8D7C7C");
             selected = nav_item_book;
-            System.out.println("Selected: " + currentTable.name());
-            //show books
+            mainController.setCurrentTable(currentTable);
         }
     }
 
     private void handleNavTextbook() {
-        if (selected != null) {
-            selected.setStyle("-fx-background-color: #FFFFFF");
-        }
         if (currentTable != TableTypes.TEXTBOOK) {
+            if (selected != null) {
+                selected.setStyle("-fx-background-color: #FFFFFF");
+            }
             currentTable = TableTypes.TEXTBOOK;
             nav_item_textbook.setStyle("-fx-background-color: #8D7C7C");
             selected = nav_item_textbook;
-            System.out.println("Selected: " + currentTable.name());
-            //show text books
+            mainController.setCurrentTable(currentTable);
         }
+    }
+
+    private void handleNavMedia() {
+        if (currentTable != TableTypes.MEDIA) {
+            if (selected != null) {
+                selected.setStyle("-fx-background-color: #FFFFFF");
+            }
+            currentTable = TableTypes.MEDIA;
+            nav_item_media.setStyle("-fx-background-color: #8D7C7C");
+            selected = nav_item_media;
+            mainController.setCurrentTable(currentTable);
+        }
+    }
+
+    private void handleNavComputer() {
+        if (currentTable != TableTypes.COMPUTER) {
+            if (selected != null) {
+                selected.setStyle("-fx-background-color: #FFFFFF");
+            }
+
+            currentTable = TableTypes.COMPUTER;
+            nav_item_computer.setStyle("-fx-background-color: #8D7C7C");
+            selected = nav_item_computer;
+            mainController.setCurrentTable(currentTable);
+        }
+    }
+
+    private void handleNavTutor() {
+        if (currentTable != TableTypes.TUTOR) {
+            if (selected != null) {
+                selected.setStyle("-fx-background-color: #FFFFFF");
+            }
+
+            currentTable = TableTypes.TUTOR;
+            nav_item_tutor.setStyle("-fx-background-color: #8D7C7C");
+            selected = nav_item_tutor;
+            mainController.setCurrentTable(currentTable);
+        }
+    }
+
+    private void handleNavBookLoan() {
+        if (currentTable != TableTypes.BOOK_LOAN) {
+            if (selected != null) {
+                selected.setStyle("-fx-background-color: #FFFFFF");
+            }
+
+            currentTable = TableTypes.BOOK_LOAN;
+            nav_item_book_loan.setStyle("-fx-background-color: #8D7C7C");
+            selected = nav_item_book_loan;
+            mainController.setCurrentTable(currentTable);
+        }
+    }
+
+    private void handleNavTextBookLoan() {
+        if (currentTable != TableTypes.TEXTBOOK_LOAN) {
+            if (selected != null) {
+                selected.setStyle("-fx-background-color: #FFFFFF");
+            }
+
+            currentTable = TableTypes.TEXTBOOK_LOAN;
+            nav_item_textbook_loan.setStyle("-fx-background-color: #8D7C7C");
+            selected = nav_item_textbook_loan;
+            mainController.setCurrentTable(currentTable);
+        }
+    }
+
+    private void handleNavMediaLoan() {
+        if (currentTable != TableTypes.MEDIA_LOAN) {
+            if (selected != null) {
+                selected.setStyle("-fx-background-color: #FFFFFF");
+            }
+
+            currentTable = TableTypes.MEDIA_LOAN;
+            nav_item_media_loan.setStyle("-fx-background-color: #8D7C7C");
+            selected = nav_item_media_loan;
+            mainController.setCurrentTable(currentTable);
+        }
+    }
+
+    private void handleNavStaff() {
+        if (currentTable != TableTypes.STAFF) {
+            if (selected != null) {
+                selected.setStyle("-fx-background-color: #FFFFFF");
+            }
+
+            currentTable = TableTypes.STAFF;
+            nav_item_staff.setStyle("-fx-background-color: #8D7C7C");
+            selected = nav_item_staff;
+            mainController.setCurrentTable(currentTable);
+        }
+    }
+
+    private void handleNavCustomer() {
+        if (currentTable != TableTypes.CUSTOMER) {
+            if (selected != null) {
+                selected.setStyle("-fx-background-color: #FFFFFF");
+            }
+
+            currentTable = TableTypes.CUSTOMER;
+            nav_item_customer.setStyle("-fx-background-color: #8D7C7C");
+            selected = nav_item_customer;
+            mainController.setCurrentTable(currentTable);
+        }
+    }
+
+    void setMainController(MainController mainController) {
+        this.mainController = mainController;
     }
 
 }
