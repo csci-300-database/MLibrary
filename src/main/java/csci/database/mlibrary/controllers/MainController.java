@@ -6,7 +6,7 @@ import com.jfoenix.transitions.hamburger.HamburgerBasicCloseTransition;
 import csci.database.mlibrary.MainView;
 import csci.database.mlibrary.database.SQLManager;
 import csci.database.mlibrary.enums.TableTypes;
-import csci.database.mlibrary.structures.Book;
+import csci.database.mlibrary.structures.*;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -31,7 +31,10 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
+@SuppressWarnings("unchecked")
 public class MainController implements Initializable, EventHandler<Event> {
 
     private Stage primaryStage;
@@ -61,7 +64,7 @@ public class MainController implements Initializable, EventHandler<Event> {
     private Label label_instruct;
 
     @FXML
-    private JFXTreeTableView<Book> library_table;
+    private JFXTreeTableView library_table;
 
     private double offsetX = 0;
     private double offsetY = 0;
@@ -71,8 +74,14 @@ public class MainController implements Initializable, EventHandler<Event> {
     private TableTypes currentTable;
 
     private ObservableList<Book> bookObservables = FXCollections.observableArrayList();
+    private ObservableList<TextBook> textBookObservables = FXCollections.observableArrayList();
+    private ObservableList<Media> mediaObservables = FXCollections.observableArrayList();
+    private ObservableList<Tutor> tutorObservables = FXCollections.observableArrayList();
+    private ObservableList<Computer> computerObservables = FXCollections.observableArrayList();
 
     private SQLManager sqlManager;
+
+    private ExecutorService pool;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -103,6 +112,7 @@ public class MainController implements Initializable, EventHandler<Event> {
         min_icon.setOnMouseClicked(this);
 
         currentTable = null;
+        pool = Executors.newFixedThreadPool(5);
     }
 
     @Override
@@ -224,10 +234,22 @@ public class MainController implements Initializable, EventHandler<Event> {
     private void drawTable() {
         switch (currentTable) {
             case BOOK:
+                pool.execute(booksRunnable);
                 drawBookTable();
                 break;
             case TEXTBOOK:
-                drawTextBook();
+                pool.execute(textbooksRunnable);
+                break;
+            case MEDIA:
+                pool.execute(mediaRunnable);
+                break;
+            case TUTOR:
+                pool.execute(tutorRunnable);
+                drawTutor();
+                break;
+            case COMPUTER:
+                pool.execute(computerRunnable);
+                drawComputer();
                 break;
             default :
                 System.out.println("Unknown Table");
@@ -236,6 +258,7 @@ public class MainController implements Initializable, EventHandler<Event> {
     }
 
     private void drawBookTable() {
+
         JFXTreeTableColumn<Book, String> bookTitleCol = new JFXTreeTableColumn<>("Book Title");
         bookTitleCol.setPrefWidth(150);
         bookTitleCol.setCellValueFactory(param -> param.getValue().getValue().title);
@@ -260,9 +283,6 @@ public class MainController implements Initializable, EventHandler<Event> {
         bookIdCol.setPrefWidth(150);
         bookIdCol.setCellValueFactory(param -> param.getValue().getValue().bookId);
 
-        List<Book> books = sqlManager.collectBooks();
-        bookObservables.addAll(books);
-
         final TreeItem<Book> root = new RecursiveTreeItem<>(bookObservables, RecursiveTreeObject::getChildren);
         List<JFXTreeTableColumn<Book, String>> columns = Arrays.asList(bookTitleCol, bookAuthorCol, bookGenreCol, bookISBNCol, bookIsleCol, bookIdCol);
         library_table.getColumns().setAll(columns);
@@ -271,7 +291,188 @@ public class MainController implements Initializable, EventHandler<Event> {
     }
 
     private void drawTextBook() {
+        JFXTreeTableColumn<TextBook, String> bookTitleCol = new JFXTreeTableColumn<>("Book Title");
+        bookTitleCol.setPrefWidth(150);
+        bookTitleCol.setCellValueFactory(param -> param.getValue().getValue().title);
 
+        JFXTreeTableColumn<TextBook, String> bookAuthorCol = new JFXTreeTableColumn<>("Book Author");
+        bookAuthorCol.setPrefWidth(150);
+        bookAuthorCol.setCellValueFactory(param -> param.getValue().getValue().author);
+
+        JFXTreeTableColumn<TextBook, String> bookGenreCol = new JFXTreeTableColumn<>("Book Subject");
+        bookGenreCol.setPrefWidth(150);
+        bookGenreCol.setCellValueFactory(param -> param.getValue().getValue().subject);
+
+        JFXTreeTableColumn<TextBook, String> bookISBNCol = new JFXTreeTableColumn<>("Book ISBN");
+        bookISBNCol.setPrefWidth(150);
+        bookISBNCol.setCellValueFactory(param -> param.getValue().getValue().ISBN);
+
+        JFXTreeTableColumn<TextBook, String> bookIsleCol = new JFXTreeTableColumn<>("Book Isle");
+        bookIsleCol.setPrefWidth(150);
+        bookIsleCol.setCellValueFactory(param -> param.getValue().getValue().isle);
+
+        JFXTreeTableColumn<TextBook, String> bookIdCol = new JFXTreeTableColumn<>("Book Id");
+        bookIdCol.setPrefWidth(150);
+        bookIdCol.setCellValueFactory(param -> param.getValue().getValue().textId);
+
+        final TreeItem<TextBook> root = new RecursiveTreeItem<>(textBookObservables, RecursiveTreeObject::getChildren);
+        List<JFXTreeTableColumn<TextBook, String>> columns = Arrays.asList(bookTitleCol, bookAuthorCol, bookGenreCol, bookISBNCol, bookIsleCol, bookIdCol);
+        library_table.getColumns().setAll(columns);
+        library_table.setRoot(root);
+        library_table.setShowRoot(false);
     }
+
+    private void drawMedia() {
+        JFXTreeTableColumn<Media, String> mediaTitleCol = new JFXTreeTableColumn<>("Media Title");
+        mediaTitleCol.setPrefWidth(150);
+        mediaTitleCol.setCellValueFactory(param -> param.getValue().getValue().title);
+
+        JFXTreeTableColumn<Media, String> mediaPublisherCol = new JFXTreeTableColumn<>("Media Publisher");
+        mediaPublisherCol.setPrefWidth(150);
+        mediaPublisherCol.setCellValueFactory(param -> param.getValue().getValue().publisher);
+
+        JFXTreeTableColumn<Media, String> mediaGenreCol = new JFXTreeTableColumn<>("Media Genre");
+        mediaGenreCol.setPrefWidth(150);
+        mediaGenreCol.setCellValueFactory(param -> param.getValue().getValue().genre);
+
+        JFXTreeTableColumn<Media, String> mediaIsleCol = new JFXTreeTableColumn<>("Media Isle");
+        mediaIsleCol.setPrefWidth(150);
+        mediaIsleCol.setCellValueFactory(param -> param.getValue().getValue().isle);
+
+        JFXTreeTableColumn<Media, String> mediaIdCol = new JFXTreeTableColumn<>("Media Id");
+        mediaIdCol.setPrefWidth(150);
+        mediaIdCol.setCellValueFactory(param -> param.getValue().getValue().mediaId);
+
+        final TreeItem<Media> root = new RecursiveTreeItem<>(mediaObservables, RecursiveTreeObject::getChildren);
+        List<JFXTreeTableColumn<Media, String>> columns = Arrays.asList(mediaTitleCol, mediaPublisherCol, mediaGenreCol, mediaIsleCol, mediaIdCol);
+        library_table.getColumns().setAll(columns);
+        library_table.setRoot(root);
+        library_table.setShowRoot(false);
+    }
+
+    private void drawComputer() {
+        JFXTreeTableColumn<Computer, String> computerTypeCol = new JFXTreeTableColumn<>("Computer Type");
+        computerTypeCol.setPrefWidth(150);
+        computerTypeCol.setCellValueFactory(param -> param.getValue().getValue().type);
+
+        JFXTreeTableColumn<Computer, String> computerAvailabilityCol = new JFXTreeTableColumn<>("Available");
+        computerAvailabilityCol.setPrefWidth(150);
+        computerAvailabilityCol.setCellValueFactory(param -> param.getValue().getValue().available);
+
+        JFXTreeTableColumn<Computer, String> computerNumberCol = new JFXTreeTableColumn<>("Computer Id");
+        computerNumberCol.setPrefWidth(150);
+        computerNumberCol.setCellValueFactory(param -> param.getValue().getValue().computerId);
+
+        final TreeItem<Computer> root = new RecursiveTreeItem<>(computerObservables, RecursiveTreeObject::getChildren);
+        List<JFXTreeTableColumn<Computer, String>> columns = Arrays.asList(computerTypeCol, computerAvailabilityCol, computerNumberCol);
+        library_table.getColumns().setAll(columns);
+        library_table.setRoot(root);
+        library_table.setShowRoot(false);
+    }
+
+    private void drawTutor() {
+        JFXTreeTableColumn<Tutor, String> tutorNameCol = new JFXTreeTableColumn<>("Tutor Name");
+        tutorNameCol.setPrefWidth(150);
+        tutorNameCol.setCellValueFactory(param -> param.getValue().getValue().staffName);
+
+        JFXTreeTableColumn<Tutor, String> tutorSubjectCol = new JFXTreeTableColumn<>("Tutor Subject");
+        tutorSubjectCol.setPrefWidth(150);
+        tutorSubjectCol.setCellValueFactory(param -> param.getValue().getValue().subject);
+
+        JFXTreeTableColumn<Tutor, String> tutorStatusCol = new JFXTreeTableColumn<>("Tutor Status");
+        tutorStatusCol.setPrefWidth(150);
+        tutorStatusCol.setCellValueFactory(param -> param.getValue().getValue().present);
+
+        JFXTreeTableColumn<Tutor, String> hoursFromCol = new JFXTreeTableColumn<>("Hours From");
+        hoursFromCol.setPrefWidth(150);
+        hoursFromCol.setCellValueFactory(param -> param.getValue().getValue().startAvailability);
+
+        JFXTreeTableColumn<Tutor, String> hoursToCol = new JFXTreeTableColumn<>("Hours To");
+        hoursToCol.setPrefWidth(150);
+        hoursToCol.setCellValueFactory(param -> param.getValue().getValue().endAvailability);
+
+        JFXTreeTableColumn<Tutor, String> tutorNumberCol = new JFXTreeTableColumn<>("Tutor Number");
+        tutorNumberCol.setPrefWidth(150);
+        tutorNumberCol.setCellValueFactory(param -> param.getValue().getValue().tutorNo);
+
+        final TreeItem<Tutor> root = new RecursiveTreeItem<>(tutorObservables, RecursiveTreeObject::getChildren);
+        List<JFXTreeTableColumn<Tutor, String>> columns = Arrays.asList(tutorNameCol, tutorSubjectCol, tutorStatusCol,
+                hoursFromCol, hoursToCol, tutorNumberCol);
+        library_table.getColumns().setAll(columns);
+        library_table.setRoot(root);
+        library_table.setShowRoot(false);
+    }
+
+    private Runnable booksRunnable = new Runnable() {
+        @Override
+        public void run() {
+            List<Book> books = sqlManager.collectBooks();
+            bookObservables.addAll(books);
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    drawBookTable();
+                }
+            });
+        }
+    };
+
+    private Runnable textbooksRunnable = new Runnable() {
+        @Override
+        public void run() {
+            List<TextBook> books = sqlManager.collectTextBooks();
+            textBookObservables.addAll(books);
+
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    drawTextBook();
+                }
+            });
+        }
+    };
+
+    private Runnable tutorRunnable = new Runnable() {
+        @Override
+        public void run() {
+            List<Media> media = sqlManager.collectMedia();
+            mediaObservables.addAll(media);
+
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    drawTutor();
+                }
+            });
+        }
+    };
+
+    private Runnable mediaRunnable = new Runnable() {
+        @Override
+        public void run() {
+            List<Computer> computers = sqlManager.collectComputers();
+            computerObservables.addAll(computers);
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    drawMedia();
+                }
+            });
+        }
+    };
+
+    private Runnable computerRunnable = new Runnable() {
+        @Override
+        public void run() {
+            List<Tutor> tutors = sqlManager.collectTutors();
+            tutorObservables.addAll(tutors);
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    drawComputer();
+                }
+            });
+        }
+    };
 
 }

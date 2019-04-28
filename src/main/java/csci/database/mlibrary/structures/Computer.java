@@ -5,9 +5,9 @@ import javafx.beans.property.*;
 
 public class Computer extends RecursiveTreeObject<Computer> {
 
-       StringProperty computerId;
-       StringProperty type;
-       StringProperty available;
+       public StringProperty computerId;
+       public StringProperty type;
+       public StringProperty available;
 
        public Computer(int computerId, String type, boolean available) {
            this.computerId = new SimpleStringProperty(String.valueOf(computerId));

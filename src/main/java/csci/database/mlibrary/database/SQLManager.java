@@ -34,7 +34,7 @@ public class SQLManager {
         }
     }
 
-    public List<TextBook> collectTextBook() {
+    public List<TextBook> collectTextBooks() {
         List<TextBook> textList = new ArrayList<>();
         connect();
         if (conn != null) {
@@ -116,7 +116,7 @@ public class SQLManager {
         return mediaList;
     }
 
-    public List<Computer> collectComputer() {
+    public List<Computer> collectComputers() {
         List<Computer> compList = new ArrayList<>();
         connect();
         if (conn != null) {
@@ -129,7 +129,7 @@ public class SQLManager {
                     int computerNo = rs.getInt("computerNo");
                     String type = rs.getString("type");
                     boolean availability = rs.getBoolean("availability");
-                     computer= new Computer(computerNo, type, availability);
+                    computer = new Computer(computerNo, type, availability);
                     compList.add(computer);
                 }
                 conn.close();
@@ -140,24 +140,25 @@ public class SQLManager {
         return compList;
     }
 
-    /*
-    public List<Tutor> collectTutor() {
+    public List<Tutor> collectTutors() {
         List<Tutor> tutorList = new ArrayList<>();
         connect();
         if (conn != null) {
-            String query = "SELECT * FROM Tutor";
+            String query = "SELECT *  FROM Tutor JOIN Staff On Staff.staffNo = Tutor.staffNo";
             try {
                 PreparedStatement prepStmt = conn.prepareStatement(query);
                 ResultSet rs = prepStmt.executeQuery();
                 Tutor Tutor;
                 while (rs.next()) {
                     int tutorNo = rs.getInt("tutorNo");
-                    String staffNo = rs.getString("staffNo");
+                    String firstName = rs.getString("first_name");
+                    String lastName = rs.getString("last_name");
                     String subject = rs.getString("subject");
-                    String sAvailability = rs.getString("sAvailability");
-                    String fAvailability = rs.getString("fAvailability");
-                    boolean present=rs.getBoolean("present");
-                    Tutor = new Tutor(tutorNo, staffNo, subject, sAvailability, fAvailability,present);
+                    Time sAvailability = rs.getTime("sAvailability");
+                    Time fAvailability = rs.getTime("fAvailability");
+                    boolean present = rs.getBoolean("present");
+                    String fullName = firstName + " " + lastName;
+                    Tutor = new Tutor(fullName, tutorNo, subject, sAvailability, fAvailability, present);
                     tutorList.add(Tutor);
                 }
                 conn.close();
@@ -168,5 +169,4 @@ public class SQLManager {
         }
         return tutorList;
     }
-    */
 }
