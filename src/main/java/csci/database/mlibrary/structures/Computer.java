@@ -5,14 +5,18 @@ import javafx.beans.property.*;
 
 public class Computer extends RecursiveTreeObject<Computer> {
 
-       IntegerProperty computerId;
+       StringProperty computerId;
        StringProperty type;
-       BooleanProperty available;
+       StringProperty available;
 
        public Computer(int computerId, String type, boolean available) {
-           this.computerId = new SimpleIntegerProperty(computerId);
+           this.computerId = new SimpleStringProperty(String.valueOf(computerId));
            this.type = new SimpleStringProperty(type);
-           this.available = new SimpleBooleanProperty(available);
+           if (available) {
+               this.available = new SimpleStringProperty("Yes");
+           } else {
+               this.available = new SimpleStringProperty("No");
+           }
        }
 
 }
