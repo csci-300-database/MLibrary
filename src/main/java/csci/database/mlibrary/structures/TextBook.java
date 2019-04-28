@@ -1,6 +1,8 @@
 package csci.database.mlibrary.structures;
 
-public class TextBook {
+import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+
+public class TextBook extends RecursiveTreeObject<TextBook> {
     private int textId;
     private String title;
     private String author;
