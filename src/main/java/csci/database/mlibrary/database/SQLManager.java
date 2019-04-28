@@ -1,8 +1,6 @@
 package csci.database.mlibrary.database;
 
-import csci.database.mlibrary.structures.Book;
-import csci.database.mlibrary.structures.Media;
-import csci.database.mlibrary.structures.TextBook;
+import csci.database.mlibrary.structures.*;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -102,7 +100,7 @@ public class SQLManager {
                 ResultSet rs = prepStmt.executeQuery();
                 Media media;
                 while (rs.next()) {
-                    int mediaId = rs.getInt("textId");
+                    int mediaId = rs.getInt("mediaId");
                     String title = rs.getString("title");
                     String publisher = rs.getString("publisher");
                     String genre = rs.getString("genre");
@@ -117,4 +115,58 @@ public class SQLManager {
         }
         return mediaList;
     }
+
+    public List<Computer> collectComputer() {
+        List<Computer> compList = new ArrayList<>();
+        connect();
+        if (conn != null) {
+            String query = "SELECT * FROM Computers";
+            try {
+                PreparedStatement prepStmt = conn.prepareStatement(query);
+                ResultSet rs = prepStmt.executeQuery();
+                Computer computer;
+                while (rs.next()) {
+                    int computerNo = rs.getInt("computerNo");
+                    String type = rs.getString("type");
+                    boolean availability = rs.getBoolean("availability");
+                     computer= new Computer(computerNo, type, availability);
+                    compList.add(computer);
+                }
+                conn.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return compList;
+    }
+
+    /*
+    public List<Tutor> collectTutor() {
+        List<Tutor> tutorList = new ArrayList<>();
+        connect();
+        if (conn != null) {
+            String query = "SELECT * FROM Tutor";
+            try {
+                PreparedStatement prepStmt = conn.prepareStatement(query);
+                ResultSet rs = prepStmt.executeQuery();
+                Tutor Tutor;
+                while (rs.next()) {
+                    int tutorNo = rs.getInt("tutorNo");
+                    String staffNo = rs.getString("staffNo");
+                    String subject = rs.getString("subject");
+                    String sAvailability = rs.getString("sAvailability");
+                    String fAvailability = rs.getString("fAvailability");
+                    boolean present=rs.getBoolean("present");
+                    Tutor = new Tutor(tutorNo, staffNo, subject, sAvailability, fAvailability,present);
+                    tutorList.add(Tutor);
+                }
+                conn.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+
+        }
+        return tutorList;
+    }
+    */
 }
