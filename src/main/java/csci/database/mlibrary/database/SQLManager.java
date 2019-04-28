@@ -1,6 +1,8 @@
 package csci.database.mlibrary.database;
 
 import csci.database.mlibrary.structures.Book;
+import csci.database.mlibrary.structures.Media;
+import csci.database.mlibrary.structures.TextBook;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -34,6 +36,34 @@ public class SQLManager {
         }
     }
 
+    public List<TextBook> collectTextBook() {
+        List<TextBook> textList = new ArrayList<>();
+        connect();
+        if (conn != null) {
+            String query = "SELECT * FROM TextBook";
+            try {
+                PreparedStatement prepStmt = conn.prepareStatement(query);
+                ResultSet rs = prepStmt.executeQuery();
+                TextBook textBook;
+                while (rs.next()) {
+                    int textId = rs.getInt("textId");
+                    String title = rs.getString("title");
+                    String author = rs.getString("author");
+                    String ISBN = rs.getString("ISBN");
+                    String subject = rs.getString("subject_");
+                    String edition=rs.getString("edition");
+                    int isle = rs.getInt("isle");
+                    textBook = new TextBook(textId, title, author, ISBN, subject,edition,isle);
+                    textList.add(textBook);
+                }
+                conn.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return textList;
+    }
+
     public List<Book> collectBooks() {
         List<Book> books = new ArrayList<>();
         connect();
@@ -57,8 +87,34 @@ public class SQLManager {
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }
+
         }
         return books;
     }
 
+    public List<Media> collectMedia() {
+        List<Media> mediaList = new ArrayList<>();
+        connect();
+        if (conn != null) {
+            String query = "SELECT * FROM Media";
+            try {
+                PreparedStatement prepStmt = conn.prepareStatement(query);
+                ResultSet rs = prepStmt.executeQuery();
+                Media media;
+                while (rs.next()) {
+                    int mediaId = rs.getInt("textId");
+                    String title = rs.getString("title");
+                    String publisher = rs.getString("publisher");
+                    String genre = rs.getString("genre");
+                    int isle = rs.getInt("isle");
+                    media = new Media(mediaId, title, publisher,genre,isle);
+                    mediaList.add(media);
+                }
+                conn.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return mediaList;
+    }
 }
