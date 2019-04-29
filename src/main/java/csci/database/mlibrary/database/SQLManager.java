@@ -54,6 +54,7 @@ public class SQLManager {
                     textBook = new TextBook(textId, title, author, ISBN, subject,edition,isle);
                     textList.add(textBook);
                 }
+                System.out.println("Finished pulling text books");
                 conn.close();
             } catch (SQLException ex) {
                 ex.printStackTrace();
@@ -81,6 +82,7 @@ public class SQLManager {
                     book = new Book(bookId, title, author, ISBN, genre, isle);
                     books.add(book);
                 }
+                System.out.println("Finished pulling books");
                 conn.close();
             } catch (SQLException ex) {
                 ex.printStackTrace();
@@ -108,6 +110,7 @@ public class SQLManager {
                     media = new Media(mediaId, title, publisher,genre,isle);
                     mediaList.add(media);
                 }
+                System.out.println("Finished pulling media");
                 conn.close();
             } catch (SQLException ex) {
                 ex.printStackTrace();
@@ -132,6 +135,7 @@ public class SQLManager {
                     computer = new Computer(computerNo, type, availability);
                     compList.add(computer);
                 }
+                System.out.println("Finished pulling computers");
                 conn.close();
             } catch (SQLException ex) {
                 ex.printStackTrace();
@@ -161,6 +165,7 @@ public class SQLManager {
                     Tutor = new Tutor(fullName, tutorNo, subject, sAvailability, fAvailability, present);
                     tutorList.add(Tutor);
                 }
+                System.out.println("Finished pulling tutors");
                 conn.close();
             } catch (SQLException ex) {
                 ex.printStackTrace();

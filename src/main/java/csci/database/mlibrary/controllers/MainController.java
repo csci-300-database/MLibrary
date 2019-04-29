@@ -66,6 +66,11 @@ public class MainController implements Initializable, EventHandler<Event> {
     @FXML
     private JFXTreeTableView library_table;
 
+    @FXML
+    private JFXProgressBar table_progress;
+
+    private boolean isWorking;
+
     private double offsetX = 0;
     private double offsetY = 0;
 
@@ -112,6 +117,7 @@ public class MainController implements Initializable, EventHandler<Event> {
         min_icon.setOnMouseClicked(this);
 
         currentTable = null;
+        isWorking = false;
         pool = Executors.newFixedThreadPool(5);
     }
 
@@ -122,7 +128,7 @@ public class MainController implements Initializable, EventHandler<Event> {
             case "MOUSE_CLICKED" :
                 handleMouseEvent((MouseEvent) event);
                 break;
-            case "MOUSE_DRAGGED":
+            case "MOUSE_DRAGGED" :
                 handleMouseDragged((MouseEvent) event);
                 break;
             case "MOUSE_PRESSED" :
@@ -160,8 +166,10 @@ public class MainController implements Initializable, EventHandler<Event> {
         closeTransition.play();
         if (nav_drawer.isOpened()) {
             nav_drawer.close();
+            content_pane.toFront();
         } else {
             nav_drawer.open();
+            nav_drawer.toFront();
         }
     }
 
@@ -234,22 +242,37 @@ public class MainController implements Initializable, EventHandler<Event> {
     private void drawTable() {
         switch (currentTable) {
             case BOOK:
-                pool.execute(booksRunnable);
-                drawBookTable();
+                if (!isWorking) {
+                    table_progress.setVisible(true);
+                    pool.execute(booksRunnable);
+                    drawBookTable();
+                }
                 break;
             case TEXTBOOK:
-                pool.execute(textbooksRunnable);
+                if (!isWorking) {
+                    table_progress.setVisible(true);
+                    pool.execute(textbooksRunnable);
+                }
                 break;
             case MEDIA:
-                pool.execute(mediaRunnable);
+                if (!isWorking) {
+                    table_progress.setVisible(true);
+                    pool.execute(mediaRunnable);
+                }
                 break;
             case TUTOR:
-                pool.execute(tutorRunnable);
-                drawTutor();
+                if (!isWorking) {
+                    table_progress.setVisible(true);
+                    pool.execute(tutorRunnable);
+                    drawTutor();
+                }
                 break;
             case COMPUTER:
-                pool.execute(computerRunnable);
-                drawComputer();
+                if (!isWorking) {
+                    table_progress.setVisible(true);
+                    pool.execute(computerRunnable);
+                    drawComputer();
+                }
                 break;
             default :
                 System.out.println("Unknown Table");
@@ -258,7 +281,6 @@ public class MainController implements Initializable, EventHandler<Event> {
     }
 
     private void drawBookTable() {
-
         JFXTreeTableColumn<Book, String> bookTitleCol = new JFXTreeTableColumn<>("Book Title");
         bookTitleCol.setPrefWidth(150);
         bookTitleCol.setCellValueFactory(param -> param.getValue().getValue().title);
@@ -408,11 +430,10 @@ public class MainController implements Initializable, EventHandler<Event> {
         public void run() {
             List<Book> books = sqlManager.collectBooks();
             bookObservables.addAll(books);
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
-                    drawBookTable();
-                }
+            Platform.runLater(() -> {
+                drawBookTable();
+                isWorking = false;
+                table_progress.setVisible(false);
             });
         }
     };
@@ -423,11 +444,10 @@ public class MainController implements Initializable, EventHandler<Event> {
             List<TextBook> books = sqlManager.collectTextBooks();
             textBookObservables.addAll(books);
 
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
-                    drawTextBook();
-                }
+            Platform.runLater(() -> {
+                drawTextBook();
+                isWorking = false;
+                table_progress.setVisible(false);
             });
         }
     };
@@ -435,14 +455,13 @@ public class MainController implements Initializable, EventHandler<Event> {
     private Runnable tutorRunnable = new Runnable() {
         @Override
         public void run() {
-            List<Media> media = sqlManager.collectMedia();
-            mediaObservables.addAll(media);
-
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
-                    drawTutor();
-                }
+            List<Tutor> tutors = sqlManager.collectTutors();
+            tutorObservables.addAll(tutors);
+            System.out.println();
+            Platform.runLater(() -> {
+                drawTutor();
+                isWorking = false;
+                table_progress.setVisible(false);
             });
         }
     };
@@ -450,13 +469,12 @@ public class MainController implements Initializable, EventHandler<Event> {
     private Runnable mediaRunnable = new Runnable() {
         @Override
         public void run() {
-            List<Computer> computers = sqlManager.collectComputers();
-            computerObservables.addAll(computers);
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
-                    drawMedia();
-                }
+            List<Media> media = sqlManager.collectMedia();
+            mediaObservables.addAll(media);
+            Platform.runLater(() -> {
+                drawMedia();
+                isWorking = false;
+                table_progress.setVisible(false);
             });
         }
     };
@@ -464,13 +482,12 @@ public class MainController implements Initializable, EventHandler<Event> {
     private Runnable computerRunnable = new Runnable() {
         @Override
         public void run() {
-            List<Tutor> tutors = sqlManager.collectTutors();
-            tutorObservables.addAll(tutors);
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
-                    drawComputer();
-                }
+            List<Computer> computers = sqlManager.collectComputers();
+            computerObservables.addAll(computers);
+            Platform.runLater(() -> {
+                drawComputer();
+                isWorking = false;
+                table_progress.setVisible(false);
             });
         }
     };

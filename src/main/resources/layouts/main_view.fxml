@@ -2,6 +2,7 @@
 
 <?import com.jfoenix.controls.JFXDrawer?>
 <?import com.jfoenix.controls.JFXHamburger?>
+<?import com.jfoenix.controls.JFXProgressBar?>
 <?import com.jfoenix.controls.JFXTreeTableView?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
@@ -26,6 +27,7 @@
       <children>
          <JFXTreeTableView fx:id="library_table" prefHeight="545.0" prefWidth="609.0" />
          <Label fx:id="label_instruct" alignment="CENTER" prefHeight="70.0" prefWidth="384.0" styleClass="label_instruct" text="Click the ☰ icon to navigate the database" visible="false" />
+         <JFXProgressBar fx:id="table_progress" prefHeight="20.0" visible="false" />
       </children>
    </StackPane>
    <JFXDrawer fx:id="nav_drawer" defaultDrawerSize="200.0" direction="RIGHT" layoutX="700.0" layoutY="55.0" prefHeight="545.0" prefWidth="200.0" />

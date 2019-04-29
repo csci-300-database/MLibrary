@@ -1,11 +1,10 @@
 package csci.database.mlibrary.structures;
 
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
-import csci.database.mlibrary.interfaces.Collection;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-public class Book extends RecursiveTreeObject<Book> implements Collection {
+public class Book extends RecursiveTreeObject<Book> {
 
     public StringProperty bookId;
     public StringProperty title;
